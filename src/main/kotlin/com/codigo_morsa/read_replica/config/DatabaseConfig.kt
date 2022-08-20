@@ -82,7 +82,7 @@ open class DatabaseConfig {
         entityManagerFactoryBean.setPackagesToScan("com.codigo_morsa.read_replica.*")
         val vendorAdapter = HibernateJpaVendorAdapter()
         val jpaDialect: HibernateJpaDialect = vendorAdapter.jpaDialect
-        jpaDialect.setPrepareConnection(true)   // https://stackoverflow.com/a/68078228/6398014
+        jpaDialect.setPrepareConnection(false)   // https://stackoverflow.com/a/68078228/6398014
         entityManagerFactoryBean.jpaVendorAdapter = vendorAdapter
         entityManagerFactoryBean.setJpaProperties(additionalProperties())
         return entityManagerFactoryBean

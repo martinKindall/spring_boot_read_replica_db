@@ -38,7 +38,7 @@ class Scheduler(
                         libroService.saveLibro(Libro(name = "probando4 ${numero++}"))
                     })
                 }
-                delay(10000)
+                delay(100)
             }
         }
     }
