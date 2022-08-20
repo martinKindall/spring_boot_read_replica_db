@@ -1,5 +1,6 @@
 package com.codigo_morsa.read_replica.config
 
+import com.codigo_morsa.read_replica.data.TransactionType
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.hibernate.jpa.HibernatePersistenceProvider
@@ -53,7 +54,7 @@ open class DatabaseConfig {
         config.username = "root"
         config.password = "pass1234"
 
-        config.minimumIdle = 10
+        config.minimumIdle = 1
         config.maximumPoolSize = 10
         config.connectionTimeout = 30000
 
@@ -65,8 +66,8 @@ open class DatabaseConfig {
     fun actualDataSource(): TransactionRoutingDataSource {
         val routingDataSource = TransactionRoutingDataSource()
         val dataSourceMap: MutableMap<Any, Any> = HashMap()
-        dataSourceMap["write"] = datasource()
-        dataSourceMap["read"] = datasource()
+        dataSourceMap[TransactionType.WRITE] = datasource()
+        dataSourceMap[TransactionType.READ] = datasource()
         routingDataSource.setTargetDataSources(dataSourceMap)
         return routingDataSource
     }
@@ -81,7 +82,7 @@ open class DatabaseConfig {
         entityManagerFactoryBean.setPackagesToScan("com.codigo_morsa.read_replica.*")
         val vendorAdapter = HibernateJpaVendorAdapter()
         val jpaDialect: HibernateJpaDialect = vendorAdapter.jpaDialect
-        jpaDialect.setPrepareConnection(false)   // https://stackoverflow.com/a/68078228/6398014
+        jpaDialect.setPrepareConnection(true)   // https://stackoverflow.com/a/68078228/6398014
         entityManagerFactoryBean.jpaVendorAdapter = vendorAdapter
         entityManagerFactoryBean.setJpaProperties(additionalProperties())
         return entityManagerFactoryBean
@@ -120,10 +121,14 @@ open class DatabaseConfig {
     class TransactionRoutingDataSource: AbstractRoutingDataSource() {
 
         override fun determineCurrentLookupKey(): Any {
-            return if (TransactionSynchronizationManager.isCurrentTransactionReadOnly())
-                "read"
-            else
-                "write"
+            return if (TransactionSynchronizationManager.isCurrentTransactionReadOnly()) {
+                logger.info("its a read")
+                TransactionType.READ
+            }
+            else {
+                logger.info("its a write")
+                TransactionType.WRITE
+            }
         }
     }
 }
