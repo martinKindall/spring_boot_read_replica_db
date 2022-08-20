@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0.30
+    restart: "always"
+    environment:
+      MYSQL_DATABASE: 'testdb'
+      MYSQL_ROOT_PASSWORD: 'pass1234'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    command: --character-set-server=latin1 --collation-server=latin1_swedish_ci
