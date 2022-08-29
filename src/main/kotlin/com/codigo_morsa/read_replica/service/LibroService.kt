@@ -4,6 +4,7 @@ import com.codigo_morsa.read_replica.model.Libro
 import com.codigo_morsa.read_replica.repository.LibroRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class LibroService(
@@ -27,5 +28,10 @@ class LibroService(
     @Transactional
     fun deleteAll() {
         libroRepository.deleteAll()
+    }
+
+    @Transactional
+    fun deleteAllByUpdatedAt(date: LocalDateTime) {
+        libroRepository.deleteAllByUpdatedAtCustom(date)
     }
 }
