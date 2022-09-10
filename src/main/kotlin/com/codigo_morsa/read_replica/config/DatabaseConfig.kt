@@ -67,7 +67,7 @@ open class DatabaseConfig {
         val routingDataSource = TransactionRoutingDataSource()
         val dataSourceMap: MutableMap<Any, Any> = HashMap()
         dataSourceMap[TransactionType.WRITE] = datasource()
-        dataSourceMap[TransactionType.READ] = datasource()
+        dataSourceMap[TransactionType.READ] = readOnlyDataSource("someReadonlyUrl")
         routingDataSource.setTargetDataSources(dataSourceMap)
         return routingDataSource
     }
