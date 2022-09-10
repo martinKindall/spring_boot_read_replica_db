@@ -28,23 +28,5 @@ class Scheduler(
         databaseSessionManager.runWithSession {
             libroService.deleteAllByUpdatedAt(LocalDateTime.of(2022, 11, 1, 0, 0))
         }
-
-//        var numero = 0
-
-//        while (true) {
-//            runBlocking {
-//                async {
-//                    databaseSessionManager.runWithSession(runnable =  {
-//                        libroService.saveLibro(Libro(name = "probando3 ${numero++}"))
-//                    })
-//                }
-//                async {
-//                    databaseSessionManager.runWithSession(runnable =  {
-//                        libroService.saveLibro(Libro(name = "probando4 ${numero++}"))
-//                    })
-//                }
-//                delay(100)
-//            }
-//        }
     }
 }
